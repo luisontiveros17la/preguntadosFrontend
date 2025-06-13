@@ -1,35 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import socket from './sockets';
+import './CategorySelection.css';
 
 const CategorySelection = ({ setCategoria }) => {
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
-
   const seleccionarCategoria = (categoria) => {
-    setCategoriaSeleccionada(categoria);
     socket.emit('categoriaSeleccionada', categoria);
     setCategoria(categoria);
   };
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center">Selecciona una categoría:</h2>
-      <div className="d-grid gap-2">
-        <button 
-          className="btn btn-outline-primary" 
-          onClick={() => seleccionarCategoria('culturaGeneral')}
-        >
+    <div className="form-container">
+      <h2>Selecciona una Categoría</h2>
+      <div className="button-group">
+        <button onClick={() => seleccionarCategoria('culturaGeneral')}>
           Cultura General
         </button>
-        <button 
-          className="btn btn-outline-primary" 
-          onClick={() => seleccionarCategoria('videojuegos')}
-        >
+        <button onClick={() => seleccionarCategoria('videojuegos')}>
           Videojuegos
         </button>
-        <button 
-          className="btn btn-outline-primary" 
-          onClick={() => seleccionarCategoria('deportes')}
-        >
+        <button onClick={() => seleccionarCategoria('deportes')}>
           Deportes
         </button>
       </div>
