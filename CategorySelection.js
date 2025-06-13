@@ -2,14 +2,14 @@ import React from 'react';
 import socket from './sockets';
 import './CategorySelection.css';
 
-const CategorySelection = ({ setCategoria }) => {
+const CategorySelection = ({ setCategoria, onLogout }) => {
   const seleccionarCategoria = (categoria) => {
     socket.emit('categoriaSeleccionada', categoria);
     setCategoria(categoria);
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container category-container">
       <h2>Selecciona una Categoría</h2>
       <div className="button-group">
         <button onClick={() => seleccionarCategoria('culturaGeneral')}>
@@ -22,6 +22,9 @@ const CategorySelection = ({ setCategoria }) => {
           Deportes
         </button>
       </div>
+      <button className="logout-btn" onClick={onLogout}>
+        Cerrar Sesión
+      </button>
     </div>
   );
 };
