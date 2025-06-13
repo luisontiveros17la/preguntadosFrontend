@@ -14,7 +14,7 @@ function App() {
       ) : !categoria ? (
         <CategorySelection setCategoria={setCategoria} />
       ) : (
-        <Game />
+        <Game categoria={categoria} />
       )}
     </div>
   );
