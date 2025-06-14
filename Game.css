@@ -1,6 +1,6 @@
-.form-container {
-  background: linear-gradient(to bottom right, #1a1a1a, #4d0000);
+.form-container.game-container {
   padding: 30px;
+  padding-bottom: 50px; /* Espacio extra para evitar solapamientos */
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
   width: 300px;
@@ -8,6 +8,26 @@
   color: white;
   position: relative;
   margin: auto;
+  min-height: 350px;
+  background: #1a1a1a;
+}
+
+/* Botón "Regresar" en la esquina superior izquierda */
+.back-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.back-btn:hover {
+  color: #ccc;
 }
 
 .button-group {
@@ -20,15 +40,41 @@
 button {
   width: 100%;
   padding: 10px;
-  background: #ff1a1a;
   border: none;
   border-radius: 8px;
   color: white;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  background: #ff1a1a;
+}
+button:hover {
+  background-color: #e60000;
 }
 
-button:hover {
-  background: #e60000;
+.feedback {
+  margin-top: 10px;
+}
+
+.final-screen {
+  padding-top: 50px;
+}
+
+.restart-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #ff1a1a;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.restart-btn:hover {
+  background-color: #e60000;
+}
+
+.question-text {
+  margin: 20px 0;
 }

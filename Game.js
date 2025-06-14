@@ -11,17 +11,16 @@ const Game = ({ categoria, onRestart }) => {
   const [feedback, setFeedback] = useState("");
   const [questionCount, setQuestionCount] = useState(0);
 
-  // Función para consultar la API según la categoría
+  // Solicita una pregunta a la API según la categoría seleccionada
   const fetchQuestion = async () => {
     if (questionCount >= TOTAL_QUESTIONS) return;
     let url = "";
     if (categoria === "videojuegos") {
-      // Consulta para preguntas de videojuegos
-      url = "https://the-trivia-api.com/v2/questions?categories=entertainment&subcategories=video_games&limit=1";
+      // Cambiado para que devuelva específicamente preguntas de videojuegos
+      url = "https://the-trivia-api.com/v2/questions?categories=video_games&limit=1";
     } else if (categoria === "deportes") {
       url = "https://the-trivia-api.com/v2/questions?categories=sports&limit=1";
     } else {
-      // Por defecto: cultura general
       url = "https://the-trivia-api.com/v2/questions?categories=general_knowledge&limit=1";
     }
 
@@ -31,16 +30,16 @@ const Game = ({ categoria, onRestart }) => {
       if (data && data.length > 0) {
         const q = data[0];
         setQuestion(q);
-        // Combina la respuesta correcta con las incorrectas y baraja las opciones
+        // Combina la respuesta correcta con las incorrectas y mezcla las opciones
         const allOptions = [q.correctAnswer, ...q.incorrectAnswers];
         setOptions(shuffle(allOptions));
       }
     } catch (error) {
-      console.error("Error al obtener la pregunta:", error);
+      console.error("Error fetching question:", error);
     }
   };
 
-  // Algoritmo de Fisher-Yates para barajar
+  // Función para barajar las opciones (algoritmo Fisher-Yates)
   const shuffle = (array) => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -50,80 +49,86 @@ const Game = ({ categoria, onRestart }) => {
     return shuffled;
   };
 
-  // Reinicia el contador y la puntuación cada vez que cambia la categoría,
-  // y carga la primera pregunta
   useEffect(() => {
+    // Reinicia el juego al cambiar la categoría
     setQuestionCount(0);
     setScore(0);
     setFeedback("");
     fetchQuestion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // Aquí puedes agregar listeners o emitir eventos vía socket para el modo multijugador.
+    // Por ejemplo:
+    // socket.on("nuevaPregunta", (data) => { ... });
   }, [categoria]);
 
-  // Si el valor es un objeto { text: "..." } lo extrae, sino lo retorna tal cual
+  // Extrae el texto (si es objeto con { text: "..." } o cadena)
   const extractText = (value) => {
     return typeof value === "object" && value.text ? value.text : value;
   };
 
+  // Maneja la respuesta del usuario
   const handleAnswer = (selected) => {
     if (!question) return;
     const selectedText = extractText(selected);
     const correctText = extractText(question.correctAnswer);
+
     if (selectedText === correctText) {
-      setScore(prev => prev + 1);
+      setScore((prev) => prev + 1);
       setFeedback("¡Correcto!");
+      // Aquí podrías emitir por socket la respuesta correcta para el modo multijugador
+      // socket.emit("playerAnswer", { correct: true });
     } else {
       setFeedback("¡Incorrecto!");
+      // socket.emit("playerAnswer", { correct: false });
     }
-    // Actualiza el contador de preguntas
-    const nextCount = questionCount + 1;
-    setQuestionCount(nextCount);
-    // Después de 1 segundo, limpia el feedback y carga la siguiente pregunta o finaliza
+
+    // Espera 1 segundo para mostrar el feedback y luego actualiza el contador
     setTimeout(() => {
-      setFeedback("");
-      if (nextCount < TOTAL_QUESTIONS) {
-        fetchQuestion();
-      } else {
-        // Finaliza el juego
-        setQuestion(null);
-      }
+      setQuestionCount((prevCount) => {
+        const newCount = prevCount + 1;
+        setFeedback("");
+        if (newCount < TOTAL_QUESTIONS) {
+          fetchQuestion();
+        } else {
+          // Finaliza el juego
+          setQuestion(null);
+        }
+        return newCount;
+      });
     }, 1000);
   };
 
   return (
-    <div className="form-container">
-      {questionCount >= TOTAL_QUESTIONS && question === null ? (
-        <div>
-          <h2>Juego Finalizado</h2>
-          <p>Has completado {TOTAL_QUESTIONS} preguntas.</p>
-          <p>Puntuación final: {score}</p>
-          <button onClick={onRestart}>Regresar al inicio</button>
-        </div>
-      ) : (
+    <div className="form-container game-container">
+      {/* Botón "Regresar" para volver a la selección de categorías */}
+      <button className="back-btn" onClick={onRestart}>
+        <i className="bi bi-arrow-left"></i> Regresar
+      </button>
+
+      {question ? (
         <>
-          <h2>
-            {categoria} - Pregunta {questionCount + 1} de {TOTAL_QUESTIONS}
-          </h2>
-          {question ? (
-            <div>
-              <p>{extractText(question.question)}</p>
-              <div className="button-group">
-                {options.map((option, idx) => (
-                  <button key={idx} onClick={() => handleAnswer(option)}>
-                    {extractText(option)}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p>Cargando pregunta...</p>
-          )}
-          <div style={{ marginTop: "20px" }}>
-            <strong>Puntuación: {score}</strong>
+          <p className="question-text">{extractText(question.question)}</p>
+          <div className="button-group">
+            {options.map((option, idx) => (
+              <button key={idx} onClick={() => handleAnswer(option)}>
+                {extractText(option)}
+              </button>
+            ))}
           </div>
-          {feedback && <div style={{ marginTop: "10px" }}>{feedback}</div>}
         </>
+      ) : (
+        <div className="final-screen">
+          <h2>Juego Finalizado</h2>
+          <p>Categoría jugada: {categoria}</p>
+          <p>Contestaste {TOTAL_QUESTIONS} preguntas</p>
+          <p>Puntuación final: {score}</p>
+          <button className="restart-btn" onClick={onRestart}>
+            <i className="bi bi-arrow-left"></i> Regresar
+          </button>
+        </div>
       )}
+
+      {feedback && <div className="feedback">{feedback}</div>}
     </div>
   );
 };
