@@ -1,69 +1,68 @@
+/* Contenedor principal del recuadro */
 .form-container {
-    padding: 30px;
-    padding-bottom: 40px; /* Asegura espacio en la parte inferior */
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-    width: 300px;
-    text-align: center;
-    color: white;
-    position: relative;
-    margin: auto;
-    min-height: 250px;
-    background: #333; /* Fondo por defecto */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+  width: 300px;
+  text-align: center;
+  color: white;
+  margin: auto;
+  min-height: 250px;
+  background: #333; /* Fondo por defecto */
 }
 
-/* Fondo para Videojuegos → Azul */
+/* Fondos específicos según la categoría */
 .form-container.videojuegos {
-    background: linear-gradient(to bottom right, #000066, #0033cc);
+  background: linear-gradient(to bottom right, #000066, #0033cc);
 }
 
-/* Fondo para Deportes → Naranja */
 .form-container.deportes {
-    background: linear-gradient(to bottom right, #994d00, #ff6600);
+  background: linear-gradient(to bottom right, #994d00, #ff6600);
 }
 
-/* Fondo para Cultura General → Amarillo */
 .form-container.culturaGeneral {
-    background: linear-gradient(to bottom right, #ffff66, #ffcc00);
+  background: linear-gradient(to bottom right, #ffff66, #ffcc00);
 }
 
+/* Agrupación de botones de categorías */
 .button-group {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* Estilo general para botones */
 button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
-/* Botón "Cerrar Sesión" en la esquina inferior derecha */
+/* Botón "Cerrar Sesión" ajustado para ocupar todo el ancho del recuadro */
 .logout-btn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: blue;
-    color: yellow;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  background-color: blue;
+  color: yellow;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }

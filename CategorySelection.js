@@ -6,8 +6,8 @@ const CategorySelection = ({ setCategoria, onLogout }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const seleccionarCategoria = (categoria) => {
-    setSelectedCategory(categoria); // Guarda la categoría para aplicar el fondo
-    // Retardo para visualizar el cambio de color antes de llamar al juego
+    setSelectedCategory(categoria);
+    // Retardo para notar el cambio de fondo
     setTimeout(() => {
       socket.emit('categoriaSeleccionada', categoria);
       setCategoria(categoria);
@@ -28,6 +28,7 @@ const CategorySelection = ({ setCategoria, onLogout }) => {
           Deportes
         </button>
       </div>
+      {/* Botón "Cerrar Sesión" sin posición absoluta para que se ajuste al recuadro */}
       <button className="logout-btn" onClick={onLogout}>
         Cerrar Sesión
       </button>

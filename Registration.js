@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
 
-// Función helper que obtiene los usuarios almacenados y, en caso de estar como array, lo convierte a objeto
+// La misma función helper para garantizar el formato correcto en localStorage
 const getUsuarios = () => {
   const stored = localStorage.getItem("usuarios");
   let usuarios = {};
@@ -10,7 +10,6 @@ const getUsuarios = () => {
   } catch (error) {
     usuarios = {};
   }
-  // Si los datos están en formato array (por versiones anteriores), se convierten
   if (Array.isArray(usuarios)) {
     const usuariosObj = {};
     usuarios.forEach((user) => {
@@ -24,7 +23,7 @@ const getUsuarios = () => {
   return usuarios;
 };
 
-const Login = ({ setJugador, onSwitchToRegistration }) => {
+const Registration = ({ setJugador, onSwitchToLogin }) => {
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -33,11 +32,14 @@ const Login = ({ setJugador, onSwitchToRegistration }) => {
     e.preventDefault();
     if (usuario.trim() && password.trim()) {
       const usuarios = getUsuarios();
-      if (usuarios[usuario] && usuarios[usuario] === password) {
+      if (usuarios[usuario]) {
+        setError("El usuario ya existe. Por favor, ingresa otro.");
+      } else {
+        // Agrega el usuario al objeto y lo guarda en localStorage
+        usuarios[usuario] = password;
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
         setJugador({ usuario, password });
         setError("");
-      } else {
-        setError("Usuario no registrado o contraseña incorrecta");
       }
     } else {
       setError("Por favor, complete todos los campos");
@@ -46,7 +48,7 @@ const Login = ({ setJugador, onSwitchToRegistration }) => {
 
   return (
     <div className="form-container login-container">
-      <h1>Bienvenido</h1>
+      <h1>Registrarse</h1>
       <h2>Juego Preguntados</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -61,21 +63,21 @@ const Login = ({ setJugador, onSwitchToRegistration }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Ingresar</button>
+        <button type="submit">Registrarse</button>
       </form>
       {error && <p className="error">{error}</p>}
       <p className="register-text">
-        ¿No tienes una cuenta?{" "}
+        ¿Ya tienes cuenta?{" "}
         <button
           type="button"
           className="link-button"
-          onClick={onSwitchToRegistration}
+          onClick={onSwitchToLogin}
         >
-          Registrarse
+          Iniciar Sesión
         </button>
       </p>
     </div>
   );
 };
 
-export default Login;
+export default Registration;
