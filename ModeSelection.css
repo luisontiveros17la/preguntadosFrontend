@@ -1,0 +1,30 @@
+/* Estilos para el cuadro de reto */
+.challenge-request {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  background-color: #f0f8ff;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.challenge-request p {
+  margin: 0;
+  padding: 5px 0;
+  font-size: 16px;
+}
+
+.challenge-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.challenge-buttons button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
